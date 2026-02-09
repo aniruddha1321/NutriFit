@@ -138,6 +138,8 @@ def nutritional_planner_ui(model, app_id, api_key):
         diet_preference = st.selectbox("Diet Preference", ["Vegetarian", "Non-Vegetarian"])
         preferences = st.text_area("Any dietary restrictions or preferences?")
     
+
+
     if st.button("Generate Diet Plan", type="primary"):
         if all([name, age, height, weight, diet_preference]):
             bmi = calculate_bmi(weight, height)
@@ -163,7 +165,10 @@ def nutritional_planner_ui(model, app_id, api_key):
             )
             
             with st.spinner("Generating your personalized diet plan..."):
-                st.session_state.diet_plan = model.generate_content(prompt).text
+                try:
+                    st.session_state.diet_plan = model.generate_content(prompt).text
+                except Exception as e:
+                    st.error(f"⚠️ Could not generate diet plan. API quota may be exhausted. Please try again later.\n\nError: {e}")
                 
     if st.session_state.diet_plan:
         st.success("Your diet plan is ready!")

@@ -1,0 +1,6 @@
+__pycache__/
+*.pyc
+.streamlit/secrets.toml
+Flaunch Project Report.pdf
+Flaunch Project Report.docx
+MindFit Video Explaination.mp4

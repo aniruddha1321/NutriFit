@@ -8,7 +8,10 @@ def generate_mental_wellness_tip(model):
 def mental_health_chatbot_ui(model):
     # session states
     if 'mental_wellness_tip' not in st.session_state:
-        st.session_state.mental_wellness_tip = generate_mental_wellness_tip(model)
+        try:
+            st.session_state.mental_wellness_tip = generate_mental_wellness_tip(model)
+        except Exception:
+            st.session_state.mental_wellness_tip = "Take a moment to breathe deeply. Your mental health matters. 🧘"
     
     if 'messages' not in st.session_state:
         st.session_state.messages = []
@@ -78,8 +81,11 @@ def mental_health_chatbot_ui(model):
             f"You are a friendly and empathetic mental health support chatbot. "
             f"Respond thoughtfully to: {prompt}"
         )
-        response = model.generate_content(chatbot_prompt)
-        st.session_state.chat_response = response.text
+        try:
+            response = model.generate_content(chatbot_prompt)
+            st.session_state.chat_response = response.text
+        except Exception as e:
+            st.session_state.chat_response = f"⚠️ Sorry, I'm temporarily unavailable due to API limits. Please try again later."
         
         st.session_state.messages.append({"role": "assistant", "content": st.session_state.chat_response})
         with st.chat_message("assistant"):

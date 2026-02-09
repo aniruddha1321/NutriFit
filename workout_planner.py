@@ -12,8 +12,11 @@ def workout_planner_ui(model):
         st.session_state.workout_plan = None
     
     if 'fitness_tip' not in st.session_state:
-        prompt = "Generate a short, motivating fitness tip."
-        st.session_state.fitness_tip = model.generate_content(prompt).text
+        try:
+            prompt = "Generate a short, motivating fitness tip."
+            st.session_state.fitness_tip = model.generate_content(prompt).text
+        except Exception:
+            st.session_state.fitness_tip = "Stay consistent! Small daily efforts lead to big results over time. 💪"
 
     sidebar_style = """
         <style>
@@ -103,7 +106,10 @@ def workout_planner_ui(model):
             )
             
             with st.spinner("Creating your personalized workout plan..."):
-                st.session_state.workout_plan = model.generate_content(prompt).text
+                try:
+                    st.session_state.workout_plan = model.generate_content(prompt).text
+                except Exception as e:
+                    st.error(f"⚠️ Could not generate workout plan. API quota may be exhausted. Please try again later.\n\nError: {e}")
     
     # always display the workout plan if it exists in session state            
     if st.session_state.workout_plan:
